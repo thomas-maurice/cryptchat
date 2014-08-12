@@ -1,0 +1,53 @@
+{% extends 'layout.html' %}
+
+{% block title %}Index{% endblock title %}
+
+{% block topscript %}
+<script type="text/javascript">var host = "{{host}}";</script>
+{% endblock topscript %}
+
+{% block body %}
+    <div class="col-md-12">
+        <h1>Cryptchat</h1>
+    </div>
+    
+    <div class="col-md-12">
+    <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist" id="myTab">
+            <li><a href="#home" role="tab" data-toggle="tab">Home</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div class="tab-pane fade" id="home">
+                Choose a nickname :<br/>
+                Your RSA signature is :<br/>
+                Your RSA key is :
+                <pre id="myRSAPubstring"></pre>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 
+        Loading modal 
+    -->
+    <div class="modal fade" id="loadingmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                      <h3 class="modal-title" id="myModalLabel">Please wait <i class="fa fa-gear fa-spin"></i></h3>
+                </div>
+                <div class="modal-body">
+                    <h2>Hang on !</h2>
+                    <p>
+                        You are currently generating a pait of public/private key to ensure the
+                        cryptographic process to take place. It may take some time.
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <p class="text-muted">Cryptchat v0.0.1</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}

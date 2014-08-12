@@ -1,0 +1,30 @@
+myRSAKey = undefined
+myRandom = undefined
+myRSAPubstring = undefined
+
+# Socket.io connection code
+socket = io.connect "http://0.0.0.0:8080"
+
+# Connexion handler
+socket.on "connexion", (socket) ->
+    console.log "connected !"
+
+# Generates a random string
+randString = (len) ->
+    chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@(){}=+*/-.[]°#~&"
+    (chars.charAt Math.floor(Math.random()*chars.length) for n in [0..len]).join ''
+
+$ -> # Initialization code for jQuery
+    myRandom = randString 64
+    setTimeout () ->
+            console.log "Computing RSA key"
+            myRSAKey = cryptico.generateRSAKey myRandom, 1024
+            MyRSAPubstring = cryptico.publicKeyString myRSAKey
+            console.log "RSA key computed"
+        , 1000
+    
+    # Tabs initialization code
+    $('#myTab a:first').tab 'show'
+    $('#myTab a').click (e) ->
+        e.preventDefault()
+        $(this).tab('show')
