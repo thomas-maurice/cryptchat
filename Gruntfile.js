@@ -1,5 +1,4 @@
 module.exports = function(grunt) {
-
   // Grunt config
   grunt.initConfig({
     copy: {
@@ -9,43 +8,43 @@ module.exports = function(grunt) {
             expand: true,
             cwd: 'bower_components/bootstrap/dist',
             src: ['**/*.min.*', 'fonts/**'],
-            dest: 'build/app/public/static/'
+            dest: 'build/public/static/'
           },
           {
             expand: true,
             cwd: 'bower_components/fontawesome/',
             src: ['css/*.min.css', 'fonts/*'],
-            dest: 'build/app/public/static/'
+            dest: 'build/public/static/'
           },
           {
             expand: true,
             cwd: 'bower_components/cryptico',
             src: ['*.js'],
-            dest: 'build/app/public/static/js/'
+            dest: 'build/public/static/js/'
           },
           {
             expand: true,
             cwd: 'bower_components/jquery/dist',
             src: ['jquery.min.js'],
-            dest: 'build/app/public/static/js/'
+            dest: 'build/public/static/js/'
           },
           {
             expand: true,
             cwd: "src/",
             src: ["*.js", "routes/*.js", "views/*.html"],
-            dest: "build/app/"
+            dest: "build/"
           },
           {
             expand: true,
             cwd: ".",
             src: ["conf/*.json"],
-            dest: "build/app/"
+            dest: "build/"
           },
           {
             expand: true,
             cwd: "src/static",
             src: ["css/*.css"],
-            dest: "build/app/public/static"
+            dest: "build/public/static"
           },
         ]  
       }
@@ -64,7 +63,7 @@ module.exports = function(grunt) {
     coffee: {
         compile: {
             files: {
-                "build/app/public/static/js/main.js": "src/static/coffee/main.coffee"
+                "build/public/static/js/main.js": "src/static/coffee/main.coffee"
             }
         }
     },
@@ -72,7 +71,7 @@ module.exports = function(grunt) {
     run: {
       deploy: {
         options: {
-          cwd: "build/app"
+          cwd: "build"
         },
         cmd: "node",
         args: [
