@@ -2,6 +2,7 @@ expect = require('chai').expect
 should = require('chai').should()
 lib = require '../src/static/coffee/lib.coffee'
 
+# Test the clientside library
 describe 'Clientside library', ->
     describe '#randString', ->
         it 'Should give a string of the correct length', ->
