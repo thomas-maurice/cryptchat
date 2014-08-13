@@ -11,8 +11,15 @@ if [ -z `which bower` ]; then
 	exit 1
 fi
 
+if [ -z `which mocha` ]; then
+	echo "You must install mocha ! Run this as root :"
+	echo "npm install -g mocha"
+	exit 1
+fi
+
 echo "Building the project..."
 npm install
 bower install
+npm test
 grunt
 echo "Done"

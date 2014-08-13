@@ -4,4 +4,6 @@ randString = (len) ->
     (chars.charAt Math.floor(Math.random()*chars.length) for n in [1..len]).join ''
 
 # Exports for the tests
-module.exports.randString = randString
+# If jquery is defined then do nothing bellow
+if(!$?)
+    module.exports.randString = randString
