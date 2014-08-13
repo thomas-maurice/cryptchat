@@ -1,6 +1,15 @@
 module.exports = function(grunt) {
   // Grunt config
   grunt.initConfig({
+    concat: {
+        options: {
+            separator: ';'
+        },
+        dist: {
+            src: ['build/public/static/js/lib.js', 'build/public/static/js/main.js'],
+            dest: 'build/public/static/js/clientside.js'
+        }
+    },
     copy: {
       main: {
         files: [
@@ -61,9 +70,13 @@ module.exports = function(grunt) {
       ]
     },
     coffee: {
+        options: {
+            bare: true
+        },
         compile: {
             files: {
-                "build/public/static/js/main.js": "src/static/coffee/main.coffee"
+                "build/public/static/js/main.js": "src/static/coffee/main.coffee",
+                "build/public/static/js/lib.js": "src/static/coffee/lib.coffee"
             }
         }
     },
@@ -85,9 +98,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-coffee');
+  grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-run');
   
   // Task definition
-  grunt.registerTask('default', ['coffee', 'copy'])
+  grunt.registerTask('default', ['coffee', 'copy', 'concat'])
   grunt.registerTask('deploy', ['default', 'run:deploy'])
 }

@@ -9,11 +9,6 @@ socket = io.connect host
 socket.on "connected", (socket) ->
     console.log "connected !"
 
-# Generates a random string
-randString = (len) ->
-    chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@(){}=+*/-.[]°#~&"
-    (chars.charAt Math.floor(Math.random()*chars.length) for n in [0..len]).join ''
-
 # Initialization code for jQuery
 $ ->
     myRandom = randString 64
