@@ -14,12 +14,17 @@ var log4js = require("log4js");
 var swig = require("swig");
 var bodyparser = require('body-parser');
 var http = require('http');
+var fs = require('fs');
 var socketio = require('socket.io');
+
+if(!fs.existsSync('./logs')) {
+    fs.mkdir('./logs')
+}
 
 /* Configure the logger */
 log4js.configure('conf/log4js.json', {});
 var logger = log4js.getLogger("cryptochat");
-logger.info("Loading ccryptochat v0.0.1...")
+logger.info("Loading cryptochat v0.0.1...")
 
 var conf = require("./conf/cryptchat.json");
 logger.trace("Configured to run on port " + conf.port);
