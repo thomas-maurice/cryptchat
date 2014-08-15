@@ -23,8 +23,8 @@ if(!fs.existsSync('./logs')) {
 
 /* Configure the logger */
 log4js.configure('conf/log4js.json', {});
-var logger = log4js.getLogger("cryptochat");
-logger.info("Loading cryptochat v0.0.1...")
+var logger = log4js.getLogger("cryptchat");
+logger.info("Loading cryptchat v0.0.1...")
 
 var conf = require("./conf/cryptchat.json");
 logger.trace("Configured to run on port " + conf.port);
