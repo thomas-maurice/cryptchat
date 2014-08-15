@@ -36,19 +36,40 @@ socketOnChatRequest = (s, request) ->
     $('#tabs').append '<div class="tab-pane fade chattab" id="'+id+'"><div class="content"></div></div>'
     $('#'+id+" .content").html swig.render templates['chatwindow'], {locals: {"id": id}}
 
+# Formats a message
+formatMessage = (msg) ->
+    htmlmessage = markdown.toHTML(msg.message).remove("<p>").remove("</p>");
+    // And now smileytize it :)
+    #for(i=0;i<smileySubstitutions.length;i++)
+    #  htmlmessage = replaceAll(htmlmessage, smileySubstitutions[i][0],
+    #  '<i class="fa '+smileySubstitutions[i][1]+' fa-lg" />');
+
+    htmlmessage = htmlmessage.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">$1</a>');
+    return '<font color="blue"><i class="fa fa-comment"></i> <strong>'\
+    + msg.src + '</strong></font></span><span class="text-muted"> : ' + htmlmessage + '</span>';
+
+# Display a message
+displayMessage = (id, msg) ->
+    date = new Date();
+    horo = "[" + Date.create().format('{24hr}:{mm}:{ss}') + "]";
+  
+    message = '<div><span>'+horo + "</span> " + msg+'</div>';
+    $('#chat-'+id).prepend message;
+
 # Sends a message to a user
 sendMessageTo = (id) ->
     message = $('#message-'+id).val()
     return if message == ""
     msg = {};
-    msg.message = msg;
+    msg.message = cryptico.encrypt message, discussions[id].pubkey, user.getRSAKey();
     msg.dest = id
     msg.src = user.getID()
     msg.pubkey = user.getRSAPubstring()
     
-    socket.emit("message", JSON.stringify(message));
+    socket.emit("message", Jmessage);
      
-    displayMessage(formatMessage(message));
+    displayMessage(id, formatMessage(message));
+    $('#message-'+id).val ''
 
 # Closes a discussion by ID
 closeDiscussion = (id) ->
