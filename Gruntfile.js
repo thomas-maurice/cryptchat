@@ -39,6 +39,12 @@ module.exports = function(grunt) {
                 },
                 {
                     expand: true,
+                    cwd: 'node_modules/swig/dist/',
+                    src: ['swig.min.js'],
+                    dest: 'build/public/static/js/'
+                },
+                {
+                    expand: true,
                     cwd: 'bower_components/hint.css/',
                     src: ['hint.min.css'],
                     dest: 'build/public/static/css/'
@@ -52,7 +58,7 @@ module.exports = function(grunt) {
                 {
                     expand: true,
                     cwd: "src/",
-                    src: ["*.js", "routes/*.js", "views/*.html"],
+                    src: ["*.js", "routes/*.js", "chat/*.js", "views/*.html"],
                     dest: "build/"
                 },
                 {
@@ -65,6 +71,12 @@ module.exports = function(grunt) {
                     expand: true,
                     cwd: "src/static",
                     src: ["css/*.css"],
+                    dest: "build/public/static"
+                },
+                {
+                    expand: true,
+                    cwd: "src/static",
+                    src: ["templates/*.html"],
                     dest: "build/public/static"
                 },
             ]  
@@ -105,7 +117,7 @@ module.exports = function(grunt) {
                     'cryptchat.js'
                 ]
             }
-        }
+        },
     })
 
     // Loads the grunt tasks

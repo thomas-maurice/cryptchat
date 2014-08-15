@@ -1,11 +1,10 @@
 /*
- * chatjs.js 
+ * cryptchat.js 
  * ---------
  * 
  * Author: svartbergtroll <tmaurice59@gmail.com>
- * Web: https://github.com/svartbergtroll/chatjs
  * 
- * Simple chat app
+ * Simple cryptic chat app
  */
 
 /* Load the required frameworks */
@@ -32,7 +31,7 @@ logger.trace("Configured to run on port " + conf.port);
 /* Load the routes */
 var routes  = require("./routes");
 /* Load the chat logic */
-//var chat = require("./chat");
+var chat = require("./chat");
 
 var app = express();
 
@@ -54,9 +53,4 @@ server.listen(conf.port, '0.0.0.0', logger.info("Server up and ready, listens on
 var io = socketio.listen(server);
 
 /* Bind the socketio callbacks */
-io.sockets.on('connection', function(socket){
-    logger.debug('New websocket ' + socket.id);
-    socket.emit('contactid', socket.id);
-    socket.emit("connected");
-    socket.on('disconnect', function() {logger.debug(socket.id + " disconnected");})
-});
+io.sockets.on('connection', chat.onConnection);

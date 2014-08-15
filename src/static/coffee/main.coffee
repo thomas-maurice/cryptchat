@@ -2,6 +2,10 @@ myRSAKey = undefined
 myRandom = undefined
 myRSAPubstring = undefined
 
+templates = {}
+
+discussions = {}
+
 # Socket.io connection code
 socket = undefined
 
@@ -12,10 +16,51 @@ user = new User()
 socketOnConnected = (s) ->
     console.log "connected !"
 
+# Disconnexion handler
+socketOnDisconnect = (s) ->
+    user.setID undefined
+    $('#contactid').html '<p class="bg-warning text-warning"><strong>Warning </strong> You are curently disconnected from the server</p>'
+
+# On a contact id change
 socketOnContactID = (s, id) ->
+    user.setID id
     $('#contactid').html '<pre>'+id+'</pre>'
 
+# On a chat request
+socketOnChatRequest = (s, request) ->
+    s.emit("chatresponse", {source: user.getID(), dest: request.source, pubkey: user.getRSAPubstring()})
+    discussions[request.source] = {pubkey: request.pubkey}
+    return if $('#'+request.source).length != 0
+    id = request.source
+    $('#tablist').append '<li class="contact '+id+'"><a href="#'+id+'" role="tab" data-toggle="tab">'+id+'</a></li>'
+    $('#tabs').append '<div class="tab-pane fade chattab" id="'+id+'"><div class="content"></div></div>'
+    $('#'+id+" .content").html swig.render templates['chatwindow'], {locals: {"id": id}}
+
+# Sends a message to a user
+sendMessageTo = (id) ->
+    message = $('#message-'+id).val()
+    return if message == ""
+    msg = {};
+    msg.message = msg;
+    msg.dest = id
+    msg.src = user.getID()
+    msg.pubkey = user.getRSAPubstring()
+    
+    socket.emit("message", JSON.stringify(message));
+     
+    displayMessage(formatMessage(message));
+
+# Closes a discussion by ID
+closeDiscussion = (id) ->
+    $("#tablist ." + id).remove()
+    $("#tabs #" + id).remove()
+    discussions[id] = undefined
+    $('#tablist a:first').tab 'show'
+
+# Generates a new identity
 newIdentity = ->
+    $('.chattab').remove()
+    $('.contact').remove()
     myRandom = randString 64
     user = new User()
     console.log "Computing RSA key"
@@ -28,13 +73,24 @@ newIdentity = ->
         socket.io.reconnect()
     else
         socket = io.connect(host)
-        socket.on "connected", () ->
-            socketOnConnected(socket)
-        socket.on "contactid", (id) ->
-            socketOnContactID(socket, id)
+    
+    socket.on "connected", () ->
+        socketOnConnected(socket)
+    socket.on "disconnect", () ->
+        socketOnDisconnect(socket)
+    socket.on "contactid", (id) ->
+        socketOnContactID(socket, id)
+    socket.on "chatrequest", (request) ->
+        socketOnChatRequest(socket, request)
 
 # Initialization code for jQuery
 $ ->
+    # Load templates
+    $.ajax
+        url: "/static/templates/chatwindow.html"
+        success: (res) ->
+            templates['chatwindow'] = res
+            
     $('#loadingmodal').modal
         keyboard: false
         show: false
@@ -45,11 +101,27 @@ $ ->
             newIdentity()
         , 1000
     
+    $('.foo').click ->
+        console.log "click"
+        getButtonId this
+    
     # Tabs initialization code
-    $('#myTab a:first').tab 'show'
-    $('#myTab a').click (e) ->
+    $('#tablist a:first').tab 'show'
+    $('#tablist a').click (e) ->
         e.preventDefault()
         $(this).tab('show')
+    
+    $('#gonewchat').click ->
+        return if $('#newchat').val() == ""
+        id = $('#newchat').val()
+        if discussions[id] != undefined
+            $('#tablist a[href="#'+id+'"]').tab 'show' 
+            return
+        discussions[id] = {}
+        $('#tablist').append '<li class="contact '+id+'"><a href="#'+id+'" role="tab" data-toggle="tab">'+id+'</a></li>'
+        $('#tabs').append '<div class="tab-pane fade chattab" id="'+id+'"><div class="content"></div></div>'
+        $('#'+id+" .content").html swig.render templates['chatwindow'], {locals: {"id": id}}
+        socket.emit 'chatrequest', {source: user.getID(), dest: id, pubkey: user.getRSAPubstring()}
     
     $('#newidentity').click ->
         $('#loadingmodal').modal 'show'
