@@ -22,18 +22,38 @@
             <div class="tab-pane fade" id="home">
                 <div class="row">
                     <div class="col-md-6" style="padding-top:1em;">
+                        <h3>Your RSA public key</h3>
                         <pre id="myRSAPubstring"></pre>
+                        <h3>Your contact ID</h3>
+                        <p id="contactid">None yet, waiting for the server</p>
                     </div>
                     <div class="col-md-6" style="padding-top:1em;">
+                        <h3>Who are you ?</h3>
                         <div class="input-group input-group-lg">
                             <span class="input-group-addon">
                                 <i class="fa fa-user"></i>
                             </span>
-                            <input id="nickname" name="nickname" value="{{nickname}}" type="text" class="form-control" placeholder="you nickname" required>
+                            <input id="nickname" name="nickname" type="text" class="form-control" placeholder="you nickname" required>
                             <span class="input-group-btn">
-                                <button class="btn btn-default" type="button">Change nickname</button>
+                                <button class="btn btn-default" type="button" id="changenickname">Change nickname</button>
                             </span>
                         </div>
+                        <h3>Want to speak to someone ?</h3>
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-addon">
+                                <i class="fa fa-send"></i>
+                            </span>
+                            <input id="newchat" name="newchat" type="text" class="form-control" placeholder="someone's ID" required>
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" id="gonewchat">New chat !</button>
+                            </span>
+                        </div>
+                        <h3>Tired of this shit ?</h3>
+                        <p class="text-center">
+                            <button class="btn btn-lg btn-danger" type="button" id="newidentity">
+                                Give me a new identity !
+                            </button>
+                        </p>
                     </div>
                 </div>
             </div>

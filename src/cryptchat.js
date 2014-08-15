@@ -55,5 +55,8 @@ var io = socketio.listen(server);
 
 /* Bind the socketio callbacks */
 io.sockets.on('connection', function(socket){
-    socket.emit("connected")
+    logger.debug('New websocket ' + socket.id);
+    socket.emit('contactid', socket.id);
+    socket.emit("connected");
+    socket.on('disconnect', function() {logger.debug(socket.id + " disconnected");})
 });
