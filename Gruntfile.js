@@ -6,7 +6,7 @@ module.exports = function(grunt) {
             separator: ';'
         },
         dist: {
-            src: ['build/public/static/js/lib.js', 'build/public/static/js/main.js'],
+            src: ['build/public/static/js/lib.js', 'build/public/static/js/user.js', 'build/public/static/js/main.js'],
             dest: 'build/public/static/js/clientside.js'
         }
     },
@@ -35,6 +35,18 @@ module.exports = function(grunt) {
                     expand: true,
                     cwd: 'bower_components/jquery/dist',
                     src: ['jquery.min.js'],
+                    dest: 'build/public/static/js/'
+                },
+                {
+                    expand: true,
+                    cwd: 'bower_components/hint.css/',
+                    src: ['hint.min.css'],
+                    dest: 'build/public/static/css/'
+                },
+                {
+                    expand: true,
+                    cwd: 'bower_components/markdown/lib',
+                    src: ['markdown.js'],
                     dest: 'build/public/static/js/'
                 },
                 {

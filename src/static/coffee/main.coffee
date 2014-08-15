@@ -5,6 +5,9 @@ myRSAPubstring = undefined
 # Socket.io connection code
 socket = io.connect host
 
+# The new user
+user = new User()
+
 # Connexion handler
 socket.on "connected", (socket) ->
     console.log "connected !"
@@ -21,12 +24,11 @@ $ ->
     setTimeout () ->
             # Generates the RSA key
             console.log "Computing RSA key"
-            myRSAKey = cryptico.generateRSAKey myRandom, 1024
-            myRSAPubstring = cryptico.publicKeyString myRSAKey
-            $('#myRSAPubstring').html(myRSAPubstring.replace /([^\n]{32})/g, "$1\n")
-            console.log myRSAPubstring.replace /([^\n]{32})/g, "$1\n"
+            user.setRSAKey cryptico.generateRSAKey myRandom, 1024
+            $('#myRSAPubstring').html(user.getRSAPubstring().replace /([^\n]{32})/g, "$1\n")
             console.log "RSA key computed"
             $('#loadingmodal').modal 'hide'
+            
         , 1000
     
     # Tabs initialization code
