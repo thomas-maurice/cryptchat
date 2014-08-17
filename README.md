@@ -1,5 +1,5 @@
 # cryptchat
-The cryptographic Javascript chat client. Suck it, NSA !
+A cryptographic Javascript chat client.
 
 The aim of the app is to provide a **temporary** and secure channel of communication
 between two people. The conversation will be entirely anonymous and encrypted.
