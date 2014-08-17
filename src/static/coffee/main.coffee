@@ -2,6 +2,9 @@ myRSAKey = undefined
 myRandom = undefined
 myRSAPubstring = undefined
 
+# Templates list.
+# They are loaded when the page is loaded. This dict will contain :
+# * chatwindow
 templates = {}
 
 discussions = {}
