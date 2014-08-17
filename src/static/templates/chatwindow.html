@@ -1,0 +1,19 @@
+<div class="col-md-12" style="padding-top:1em;">
+    <div class="input-group input-group-lg">
+        <input id="message-{{id}}" name="message" onkeydown="if (event.keyCode == 13) sendMessageTo('{{id}}');" type="text" class="form-control" placeholder="Enter your message here !" required autofocus>
+            <div class="input-group-btn">
+                <button onclick="sendMessageTo('{{id}}');" class="btn btn-warning">Send !</button>
+                <button class="btn btn-lg btn-danger" onclick="closeDiscussion('{{ id }}');">Close</button>
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Options <span class="caret"></span></button>
+                <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                    <li><a class="hint--left hint--rounded text-warning" data-hint="Ninja mode will make your messages disappear after 2 minutes." id="ninjamode" href="javascript:void(0);">Switch to ninja mode</a></li>
+                    <li><a id="clearbutton" href="javascript:void(0);" onclick="$('#chat-{{id}}').html('')">Clear</a></li>
+                    <li class="divider"></li>
+                    <li><a id="randcolorbutton" href="javascript:void(0);">Randomize my color !</a></li>
+                </ul> 
+            </div>
+        </div>
+    </div>
+    <div id="chat-{{id}}">
+    </div>
+</div>
