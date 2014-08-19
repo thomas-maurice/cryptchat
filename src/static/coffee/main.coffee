@@ -78,6 +78,12 @@ socketOnMessage = (s, msg) ->
     console.log msg
     displayMessage(msg.source, formatMessage(msg));
 
+# On an error
+socketOnError = (s, msg) ->
+    if msg.type = "NOSUCHID"
+        displayMessage(msg.source, formatError({"message": "The ID `" + msg.source + "` does not exist \
+            *maybe* he has disconnected or you typed it wrong ?"}))
+
 # Creates a new tab with a given ID
 createNewTab = (id) ->
     $('#tablist').append '<li class="contact '+id+'"><a href="#'+id+'" role="tab" data-toggle="tab">'+id+'</a></li>'
@@ -96,6 +102,19 @@ formatMessage = (msg) ->
     htmlmessage = htmlmessage.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">$1</a>');
     return '<font color="blue"><i class="fa fa-comment"></i> <strong>'\
     + msg.source + '</strong></font></span><span class="text-muted"> : ' + htmlmessage + '</span>';
+
+# Formats an error
+formatError = (msg) ->
+    htmlmessage = markdown.toHTML(msg.message).remove("<p>").remove("</p>");
+    # And now smileytize it :)
+    for i in [0..smileySubstitutions.length-1]
+        while htmlmessage.has smileySubstitutions[i][0]
+            htmlmessage = htmlmessage.replace(smileySubstitutions[i][0],
+            '<i class="fa '+smileySubstitutions[i][1]+' fa-lg" />');
+        
+    htmlmessage = htmlmessage.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">$1</a>');
+    return '<span class="bg-danger text-danger"><font color="red"><i class="fa fa-times"></i> <strong>'\
+    + 'Error' + '</strong></font> : ' + htmlmessage + '</span>';
 
 # Display a message
 displayMessage = (id, msg) ->
@@ -157,6 +176,8 @@ newIdentity = ->
         socketOnChatRequest(socket, request)
     socket.on "chatresponse", (request) ->
         socketOnChatResponse(socket, request)
+    socket.on "err", (msg) ->
+        socketOnError(socket, msg)
     socket.on "message", (message) ->
         socketOnMessage(socket, message)
 
@@ -192,6 +213,7 @@ $ ->
             return
         discussions[id] = {}
         createNewTab(id)
+        $('#tablist a[href="#'+id+'"]').tab 'show' 
         socket.emit 'chatrequest', {source: user.getID(), dest: id, pubkey: user.getRSAPubstring()}
     
     $('#newidentity').click ->

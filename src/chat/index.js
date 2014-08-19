@@ -22,6 +22,7 @@ module.exports.onConnection = function(socket){
 
         if(target.length == 0) {
             logger.error(request.dest + " does not exist !");
+            socket.emit("err", {"type": "chatrequest", "source": request.dest, "code": "NOSUCHID"})
             return;
         } else {
             target = target[0]
@@ -35,6 +36,7 @@ module.exports.onConnection = function(socket){
         
         if(target.length == 0) {
             logger.error(request.dest + " does not exist !");
+            socket.emit("err", {"type": "chatresponse", "source": request.dest, "code": "NOSUCHID"})
             return;
         } else {
             target = target[0]
@@ -48,6 +50,7 @@ module.exports.onConnection = function(socket){
         
         if(target.length == 0) {
             logger.error(request.dest + " does not exist !");
+            socket.emit("err", {"type": "message", "source": request.dest, "code": "NOSUCHID"})
             return;
         } else {
             target = target[0]
