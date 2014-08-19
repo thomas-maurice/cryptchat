@@ -142,10 +142,6 @@ $ ->
             newIdentity()
         , 1000
     
-    $('.foo').click ->
-        console.log "click"
-        getButtonId this
-    
     # Tabs initialization code
     $('#tablist a:first').tab 'show'
     $('#tablist a').click (e) ->
