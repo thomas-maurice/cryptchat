@@ -9,6 +9,36 @@ templates = {}
 
 discussions = {}
 
+#
+# \brief Smiley substitution
+# These will be used to substitute smileys. To add
+# some just add an array to the array with the format :
+# ['pattern', 'replacement'],
+#
+smileySubstitutions = [
+    # Spinning one !
+    [":))", "fa-smile-o fa-spin"],
+    [":((", "fa-frown-o fa-spin"],
+    
+    # Like !
+    ["(y)", "fa-thumbs-up text-success"],
+    ["(n)", "fa-thumbs-down text-danger"],
+    
+    # Standard one
+    [":)", "fa-smile-o"],
+    [":-)", "fa-smile-o"],
+    [":]", "fa-smile-o"],
+    [":-]", "fa-smile-o"],
+    [":-/", "fa-meh-o"],
+    [":-|", "fa-meh-o"],
+    [":|", "fa-meh-o"],
+    [":(", "fa-frown-o"],
+    [":-(", "fa-frown-o"],
+    [":[", "fa-frown-o"],
+    [":-[", "fa-frown-o"],
+    ["&lt;3", "fa-heart text-danger"],
+]
+
 # Socket.io connection code
 socket = undefined
 
@@ -35,9 +65,7 @@ socketOnChatRequest = (s, request) ->
     discussions[request.source] = {pubkey: request.pubkey}
     return if $('#'+request.source).length != 0
     id = request.source
-    $('#tablist').append '<li class="contact '+id+'"><a href="#'+id+'" role="tab" data-toggle="tab">'+id+'</a></li>'
-    $('#tabs').append '<div class="tab-pane fade chattab" id="'+id+'"><div class="content"></div></div>'
-    $('#'+id+" .content").html swig.render templates['chatwindow'], {locals: {"id": id}}
+    createNewTab(id)
 
 # On a chat request
 socketOnChatResponse = (s, request) ->
@@ -50,13 +78,21 @@ socketOnMessage = (s, msg) ->
     console.log msg
     displayMessage(msg.source, formatMessage(msg));
 
+# Creates a new tab with a given ID
+createNewTab = (id) ->
+    $('#tablist').append '<li class="contact '+id+'"><a href="#'+id+'" role="tab" data-toggle="tab">'+id+'</a></li>'
+    $('#tabs').append '<div class="tab-pane fade chattab" id="'+id+'"><div class="content"></div></div>'
+    $('#'+id+" .content").html swig.render templates['chatwindow'], {locals: {"id": id}}
+
 # Formats a message
 formatMessage = (msg) ->
     htmlmessage = markdown.toHTML(msg.message).remove("<p>").remove("</p>");
     # And now smileytize it :)
-    #for(i=0;i<smileySubstitutions.length;i++)
-    #  htmlmessage = replaceAll(htmlmessage, smileySubstitutions[i][0],
-    #  '<i class="fa '+smileySubstitutions[i][1]+' fa-lg" />');
+    for i in [0..smileySubstitutions.length-1]
+        while htmlmessage.has smileySubstitutions[i][0]
+            htmlmessage = htmlmessage.replace(smileySubstitutions[i][0],
+            '<i class="fa '+smileySubstitutions[i][1]+' fa-lg" />');
+        
     htmlmessage = htmlmessage.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">$1</a>');
     return '<font color="blue"><i class="fa fa-comment"></i> <strong>'\
     + msg.source + '</strong></font></span><span class="text-muted"> : ' + htmlmessage + '</span>';
@@ -155,9 +191,7 @@ $ ->
             $('#tablist a[href="#'+id+'"]').tab 'show' 
             return
         discussions[id] = {}
-        $('#tablist').append '<li class="contact '+id+'"><a href="#'+id+'" role="tab" data-toggle="tab">'+id+'</a></li>'
-        $('#tabs').append '<div class="tab-pane fade chattab" id="'+id+'"><div class="content"></div></div>'
-        $('#'+id+" .content").html swig.render templates['chatwindow'], {locals: {"id": id}}
+        createNewTab(id)
         socket.emit 'chatrequest', {source: user.getID(), dest: id, pubkey: user.getRSAPubstring()}
     
     $('#newidentity').click ->
